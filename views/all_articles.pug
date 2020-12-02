@@ -1,0 +1,13 @@
+extends layout.pug
+
+block style
+    style
+        include ../static/css/style.css
+    link(rel="stylesheet", href="/static/bower_components/bootstrap/dist/css/bootstrap.css")
+        
+block Content
+        .container
+            h1 #{title}
+            ul.list-group
+                each article in articles
+                    a(href="/article/"+article._id).list-group-item= article.title

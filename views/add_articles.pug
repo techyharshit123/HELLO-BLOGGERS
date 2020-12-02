@@ -1,0 +1,21 @@
+extends layout.pug
+
+block style
+    style
+        include ../static/css/style.css
+    link(rel="stylesheet", href="/static/bower_components/bootstrap/dist/css/bootstrap.css")
+        
+block Content
+    .container
+        form(action="/articles/add", method="POST").my-2
+            #form-group 
+                label Title
+                input.form-control(type="text", name="title")
+            #form-group 
+                label Author
+                input.form-control(type="text", name="author")
+            #form-group 
+                label Body
+                textarea.form-control(name="body")
+            br
+            input.btn.btn-primary.my4(type="submit", value="Submit")
