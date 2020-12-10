@@ -1,3 +1,8 @@
-.bye {
+/* .bye {
   color: red;
+} */
+.alert-error {
+  background-color: rgb(240, 110, 110);
+  border-color: rgb(243, 82, 82);
+  color: white;
 }

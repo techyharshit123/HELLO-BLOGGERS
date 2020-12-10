@@ -5,14 +5,17 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const flash = require('connect-flash')
-const messages = require('express-messages')
 const session = require('express-session')
-// const Article = require('./models/article')
+const config = require('./config/database')
+const passport = require('passport');
+
+
 
 
 
 //Bringing models
 const Article=require('./models/article')
+const User=require('./models/user')
 
 
 
@@ -22,7 +25,7 @@ const port=80;
 
 
 //connecting mongodb
-mongoose.connect('mongodb://localhost/new')
+mongoose.connect(config.database)
 const db=mongoose.connection;
 
 
@@ -52,10 +55,26 @@ app.use(express.urlencoded()) //to save the data as object
 app.set('view engine', 'pug') // Set the template engine as pug
 app.set('views', path.join(__dirname, 'views')) // Set the views directory
 
+// app.use(bodyParser.urlencoded({ extended: false })); 
+// app.use(bodyParser.json());
+
+
+//////////Express validator/////////
+app.use(expressValidator()); //Express@5.3.1 works and latest not works
+
+
+//Passport config
+require('./config/passport')(passport)
+//Middleware to initialize passport
+ app.use(passport.initialize());
+ app.use(passport.session()); //persistent login sessions
+
+app.get('*',function(req,res,next){
+  res.locals.user=req.user ||null  //Declaring global object "user"
+  next();//to call next piece of middleware
+})
 
 //////////Express session middleware//////////
-// var app = express()
-// app.set('trust proxy', 1) // trust first proxy
 app.use(session({
   secret: 'keyboard cat',
   resave: true,
@@ -63,8 +82,9 @@ app.use(session({
 }))
 
 
-////////Express message validator///////
-app.use(require('connect-flash')());
+
+////////Express message///////
+app.use(flash());
 app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
   next();
@@ -74,128 +94,20 @@ app.use(function (req, res, next) {
 
 
 
+
 //Routes
 app.get('/home', (req, res) => {
-    Article.find({},function(err,articles){
-        if(err){
-            console.log(err)
-        }
-        else
-        {
             res.status(200).render('home.pug',{
-                title: 'Articles',
-                articles: articles
+                title: 'Articles'
             });
-        }
-    })
-    
-})
-app.get('/articles/add', (req, res) => {
-    Article.find({},function(err,articles){
-        if(err){
-            console.log(err)
-        }
-        else
-        {
-            res.status(200).render('add_articles.pug',{
-                title: 'Articles',
-                articles: articles
-            });
-        }
-    })
-    
 })
 
+//Bringing the routes files
+const article=require('./routes/article.js')
+app.use('/',article)
+const user=require('./routes/user.js')
+app.use('/',user)
 
-app.post('/articles/add', (req, res) => {
-    let article = new Article();
-    // console.log(req.body)
-    article.title=req.body.title
-    article.author=req.body.author
-    article.body=req.body.body
-
-    article.save((err)=>{
-        if(err)
-        {
-            console.log(err)
-            return;
-        }
-        else
-        {
-            req.flash('success', 'Article added')
-            res.redirect('/all_articles');
-        }
-    })
-    // console.log(req.body)
-    return;
-    
-})
-
-
-app.get('/all_articles', (req, res) => {
-    Article.find({},function(err,articles){
-        if(err){
-            console.log(err)
-        }
-        else
-        {
-            res.status(200).render('all_articles.pug',{
-                title: 'Articles',
-                articles: articles
-            });
-        }
-    })
-    
-})
-//Single article
-app.get('/article/:id',(req,res)=>{
-    Article.findById(req.params.id,function(err,article){
-        res.render('article.pug',{
-        article:article
-    })
-        return;
-    })
-})
-
-
-
-
-//Edit the article
-app.get('/article/edit/:id',(req,res)=>{
-    Article.findById(req.params.id,function(err,article){
-
-        res.render('edit_article.pug',{
-        article:article
-    })
-        return;
-    })
-})
-
-//update the single article
-app.post('/article/edit/:id', (req, res) => {
-    let article = {};
-    // console.log(req.body)
-    article.title=req.body.title
-    article.author=req.body.author
-    article.body=req.body.body
-
-    let query = {_id:req.params.id}
-
-    Article.update(query,article,(err)=>{
-        if(err)
-        {
-            console.log(err)
-            return;
-        }
-        else
-        {
-            res.redirect('/all_articles');
-        }
-    })
-    // console.log(req.body)
-    return;
-    
-})
 
 // START THE SERVER
 app.listen(port, () => {

@@ -1,9 +1,9 @@
 //- extends layout.pug
 
-block style
-    style
-        include ../static/css/style.css
-    link(rel="stylesheet", href="/static/bower_components/bootstrap/dist/css/bootstrap.css")
+//- block style
+//-     style
+//-         include ../static/css/style.css
+//-     link(rel="stylesheet", href="/static/bower_components/bootstrap/dist/css/bootstrap.css")
 
 //- DON'T USE EXTEND LAYOUT.PUG HERE/////////////////////////////////////////////////////////////
 
@@ -13,4 +13,4 @@ block style
             each message in messages[type]
                 div(class="alert alert-dismissible alert-"+type) #{message}  
                 //-CLASS CAN BE WRITTEN AS ABOVE ALSO
-                //-BUT WHY DISMISS IS NOT WORKING//////////////////
+                //-BUT WHY DISMISSIBLE IS NOT WORKING//////////////////

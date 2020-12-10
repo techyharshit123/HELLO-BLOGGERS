@@ -1,0 +1,31 @@
+extends layout.pug
+
+block style
+    style
+        include ../static/css/style.css
+    link(rel="stylesheet", href="/static/bower_components/bootstrap/dist/css/bootstrap.css")
+        
+block Content
+    .container
+        h2 REGISTER
+        form(action="/register", method="POST").my-2
+            #form-group 
+                label Name
+                input.form-control(type="text", name="name")
+            #form-group 
+                label Username
+                input.form-control(type="text", name="username")
+            #form-group 
+                label Password
+                input.form-control(type="password", name="password")
+            #form-group 
+                label Confirm Password
+                input.form-control(type="password", name="password2")
+            #form-group 
+                label Email
+                input.form-control(type="email", name="email")
+            #form-group 
+                label College
+                input.form-control(type="text", name="college")
+            br
+            input.btn.btn-primary.my4(type="submit", value="Submit")

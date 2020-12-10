@@ -1,31 +1,51 @@
 doctype html
 html
     head
-        title BLOG-WEBSITE
+        title NOTE-IT
         block style
         link(rel="stylesheet", href="/static/bower_components/bootstrap/dist/css/bootstrap.css")
         
     body
            
             nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
-                a.navbar-brand(href='/home') NOTE IT
+                a.navbar-brand(href='/home') NOTE-IT
                 button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
                     span.navbar-toggler-icon
                 #navbarNav.collapse.navbar-collapse
-                    ul.navbar-nav
+                    ul.nav.navbar-nav
                         li.nav-item
                             a.nav-link(href='/home') Home
                         li.nav-item
                             a.nav-link(href='/articles/add') Add Blog
                         li.nav-item
                             a.nav-link(href='/all_articles') All Blogs
-                       
+                    //- navbar-right is not wotking WHAT TO DO/////////////////
+                    ul.nav.navbar-nav.navbar-right
+                        if user
+                          li.nav-item
+                            a.nav-link(href='/logout') Logout
+                        else
+                          li.nav-item
+                            a.nav-link(href='/login') Login
+                          li.nav-item
+                            a.nav-link(href='/register') Register
 
             div.container
                 //- h1= title
                 br
                 != messages('message.pug', locals)
-                
+                if errors
+                    each error in errors
+                        div(class="alert alert-danger") #{error.msg}
                 block Content
-            script(src="/static/bower_components/jQuery/dist/jquery.js")
-            script(src="/static/bower_components/bootstrap/dist/js/bootstrap.js")
+            //- script(src="/static/bower_components/jQuery/dist/jquery.js")
+            //- script(src="/static/bower_components/bootstrap/dist/js/bootstrap.js")
+            //- script(src="/static/vendor/jquery/jquery-3.2.1.min.js")
+            //- script(src="/static/vendor/animsition/js/animsition.min.js")
+            //- script(src="/static/vendor/bootstrap/js/popper.js")
+            //- script(src="/static/vendor/bootstrap/js/bootstrap.min.js")
+            //- script(src="/static/vendor/select2/select2.min.js")
+            //- script(src="/static/vendor/daterangepicker/moment.min.js")
+            //- script(src="/static/vendor/daterangepicker/daterangepicker.js")
+            //- script(src="/static/vendor/countdowntime/countdowntime.js")
+            //- script(src="/static/js/main.js")
