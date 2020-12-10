@@ -1,2 +1,2 @@
-node_modules
-.bowerrc
+/node_modules
+ /.bowerrc
